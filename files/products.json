@@ -1,29 +1,95 @@
-[
-  {
-    "title": "Producto de prueba",
-    "description": "Descripción del producto de prueba",
-    "price": 12.99,
-    "thumbnail": "imagen.jpg",
-    "code": "ABC123",
-    "stock": 15,
-    "id": 1
-  },
-  {
-    "title": "Producto de prueba",
-    "description": "Descripción del producto de prueba",
-    "price": 9.99,
-    "thumbnail": "imagen.jpg",
-    "code": "ABC123",
-    "stock": 10,
-    "id": 2
-  },
-  {
-    "title": "Producto de prueba",
-    "description": "Descripción del producto de prueba",
-    "price": 9.99,
-    "thumbnail": "imagen.jpg",
-    "code": "ABC123",
-    "stock": 10,
-    "id": 3
-  }
-]
+{
+  "products": [
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 1
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 2
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 3
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 4
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 5
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 6
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 7
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 8
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 9
+    },
+    {
+      "title": "Producto de prueba",
+      "description": "Descripción del producto de prueba",
+      "price": 9.99,
+      "thumbnail": "imagen.jpg",
+      "code": "ABC123",
+      "stock": 10,
+      "id": 10
+    }
+  ],
+  "lastId": 10
+}

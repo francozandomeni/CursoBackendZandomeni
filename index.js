@@ -1,6 +1,9 @@
 import ProductManager from "./managers/ProductManager.js"
 
+
+
 const productManager = new ProductManager('./files/products.json');
+
 
 const newProduct = {
     title: 'Producto de prueba',
@@ -11,7 +14,9 @@ const newProduct = {
     stock: 10,
 };
 
-productManager.addProduct(newProduct);
+
+// productManager.addProduct(newProduct);
+
 
 // async function devolverProductos() {
 //     const allProducts = await productManager.getProducts();
@@ -20,18 +25,18 @@ productManager.addProduct(newProduct);
 
 // devolverProductos();
 
-// async function devolverProducto() {
+// async function devolverProductoPorId() {
 //     const productId = 3; 
 //     const product = await productManager.getProductById(productId);
 //     console.log('Producto encontrado:', product);
 
 // }
 
-// devolverProducto()
+// devolverProductoPorId()
 
 // async function productToUpdate() {
 
-//     const productIdToUpdate = 1; 
+//     const productIdToUpdate = 3; 
 //     const updatedProductData = {
 //         price: 12.99,
 //         stock: 15,
