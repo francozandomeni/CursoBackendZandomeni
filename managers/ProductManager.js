@@ -3,13 +3,26 @@ import fs from 'fs';
 export default class ProductManager {
     constructor(path) {
         this.path = path;
+        this.idCounter = 0;
+    }
+
+    async init() {
+        const products = await this.readProductsFromFile();
+        if (products.length > 0) {
+            this.idCounter = products[products.length - 1].id;
+        }
+    }
+
+    generateId() {
+        return ++this.idCounter;
     }
 
     async addProduct(product) {
         try {
+            await this.init();
             const products = await this.readProductsFromFile();
             if (this.isProductValid(product)) {
-                product.id = this.generateId(products);
+                product.id = this.generateId();
                 products.push(product);
                 await this.writeProductsToFile(products);
                 console.log(`Producto añadido. ID: ${product.id}`);
@@ -19,38 +32,47 @@ export default class ProductManager {
         }
     }
 
-    async getProducts() {
-        return this.readProductsFromFile();
+    async getProducts(limit = 10) {
+        const allProducts = await this.readProductsFromFile();
+
+        const limitedProducts = allProducts.slice(0, limit)
+
+        return limitedProducts
     }
+
+
 
     async getProductById(id) {
         const products = await this.readProductsFromFile();
         const product = products.find((p) => p.id === id);
-        if (product) {
-            return product;
-        } else {
+        if (!product) {
             console.error('Producto no encontrado');
             return null;
         }
+        return product;
+
     }
+
 
     async updateProduct(id, updatedProduct) {
         const products = await this.readProductsFromFile();
         const productIndex = products.findIndex((p) => p.id === id);
-        if (productIndex !== -1) {
-            products[productIndex] = { ...products[productIndex], ...updatedProduct };
-            await this.writeProductsToFile(products);
-            console.log(`Producto actualizado. ID: ${id}`);
-        } else {
+        if (productIndex == -1) {
             console.error('Producto no encontrado');
         }
+
+        products[productIndex] = { ...products[productIndex], ...updatedProduct };
+        await this.writeProductsToFile(products);
+        console.log(`Producto actualizado. ID: ${id}`);
     }
 
     async deleteProduct(id) {
         const products = await this.readProductsFromFile();
-        const updatedProducts = products.filter((p) => p.id !== id);
-        if (products.length > updatedProducts.length) {
-            await this.writeProductsToFile(updatedProducts);
+        const productIndex = products.findIndex((p) => p.id === id);
+
+        if (productIndex !== -1) {
+            products.splice(productIndex, 1);
+            await this.writeProductsToFile(products);
             console.log(`Producto eliminado. ID: ${id}`);
         } else {
             console.error('Producto no encontrado');
@@ -66,16 +88,16 @@ export default class ProductManager {
         return true;
     }
 
-     generateId(products) {
-        const maxId = products.reduce((max, product) => (product.id > max ? product.id : max), 0);
-        return maxId + 1;
-    }
+
 
     async readProductsFromFile() {
         try {
+
             const data = await fs.promises.readFile(this.path, 'utf-8');
             return JSON.parse(data);
+
         } catch (error) {
+            console.error('Error leyendo el archivo json:', error);
             return [];
         }
     }
@@ -88,3 +110,7 @@ export default class ProductManager {
         }
     }
 }
+
+
+
+

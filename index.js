@@ -11,7 +11,7 @@ const newProduct = {
     stock: 10,
 };
 
-productManager.addProduct(newProduct);
+// productManager.addProduct(newProduct);
 
 // async function devolverProductos() {
 //     const allProducts = await productManager.getProducts();
@@ -46,7 +46,7 @@ productManager.addProduct(newProduct);
 
 // async function deleteProduct() {
 
-//     const productIdToDelete = 3;
+//     const productIdToDelete = 6;
 
 //     await productManager.deleteProduct(productIdToDelete);
 
