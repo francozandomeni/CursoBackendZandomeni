@@ -1,15 +1,15 @@
-import ProductManager from "./managers/ProductManager.js"
+// import ProductManager from "./managers/ProductManager.js"
 
-const productManager = new ProductManager('./files/products.json');
+// const productManager = new ProductManager('./files/products.json');
 
-const newProduct = {
-    title: 'Producto de prueba',
-    description: 'Descripción del producto de prueba',
-    price: 9.99,
-    thumbnail: 'imagen.jpg',
-    code: 'ABC123',
-    stock: 10,
-};
+// const newProduct = {
+//     title: 'Producto de prueba',
+//     description: 'Descripción del producto de prueba',
+//     price: 9.99,
+//     thumbnail: 'imagen.jpg',
+//     code: 'ABC123',
+//     stock: 10,
+// };
 
 // productManager.addProduct(newProduct);
 

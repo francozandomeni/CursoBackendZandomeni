@@ -1,9 +1,16 @@
 import fs from 'fs';
+import path from 'path';
+
+
+const __filename = import.meta.url.substring('file:///'.length);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, '../');
 
 export default class ProductManager {
-    constructor(path) {
-        this.path = path;
+    constructor(pathFile) {
+        this.path = path.join(rootDir, `files`, pathFile)
         this.idCounter = 0;
+        console.log(this.path)
     }
 
     async init() {
@@ -82,7 +89,7 @@ export default class ProductManager {
     isProductValid(product) {
         const { title, description, price, thumbnail, code, stock } = product;
         if (!title || !description || !price || !thumbnail || !code || stock === undefined) {
-            console.error('Todos los campos son obligatorios');
+            console.error('Todos los campos son obligatorios', { title, description, price, thumbnail, code, stock });
             return false;
         }
         return true;
