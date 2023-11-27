@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
         const product = await productManager.getProductById(productId);
 
         if (!product) {
-            res.status(404).json({ message: "El producto con ese id no existe" });
+            res.status(400).json({ message: "El producto con ese id no existe" });
         } else {
             res.status(200).json({ message: "Producto encontrado", product });
         }
@@ -60,6 +60,52 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    const productId = parseInt(req.params.id);
+    const updatedProduct = req.body;
+
+    try {
+        await productManager.init();
+
+        // Verifica si el producto existe
+        const getProduct = await productManager.getProductById(productId);
+        if (!getProduct) {
+            return res.status(400).json({ error: 'Producto no encontrado' });
+        }
+
+        // Actualiza el producto sin cambiar el ID
+        const updatedFields = { ...getProduct, ...updatedProduct };
+        await productManager.updateProduct(productId, updatedFields);
+
+        return res.status(200).json({ message: 'Producto actualizado correctamente', updatedFields });
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    const productId = parseInt(req.params.id);
+
+    try {
+        await productManager.init();
+
+        // Verifica si el producto existe
+        const getProduct = await productManager.getProductById(productId);
+        if (!getProduct) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        // Elimina el producto
+        await productManager.deleteProduct(productId);
+
+        return res.status(200).json({ message: 'Producto eliminado correctamente' });
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 

@@ -1,118 +1,119 @@
-// import fs from "fs"
-// import path from "path"
-// import __dirname from "../utils.js" 
+import fs from "fs"
+import path from "path"
 
-// class CartManager {
-//     constructor(path){
-//         this.path = path.join(__dirname, `/files/${path}`)
-//     }
+const __filename = import.meta.url.substring('file:///'.length);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, '../');
 
 
+export default class CartManager {
+    constructor(pathFile) {
+        this.path = path.join(rootDir, `files`, pathFile)
+        this.idCounter = 0;
+        console.log(this.path)
+    }
 
-//     async addCart(newCart) {
-//     try {
-//       const carts = await this.getCarts();
+    generateCartId(carts) {
+        return carts.length ? carts[carts.length - 1].id + 1 : 1;
+    }
 
-//       newCart.id = carts.length ? carts[carts.length - 1].id + 1 : 1;
 
-//       carts.push(newCart);
+    async addCart(newCart) {
+    try {
+      const carts = await this.getCarts();
 
-//       const result = await fs.promises
-//         .writeFile(this.path, JSON.stringify(carts))
-//         .then(() => {
-//           return "Cart added";
-//         })
-//         .catch((err) => {
-//           throw new Error("Cart could not be added");
-//         });
+      newCart.id = this.generateCartId(carts)
 
-//       return result;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
+      carts.push(newCart);
 
-//   async getCartsFromFile() {
-//     try {
-//       if (!fs.existsSync(this.path)) {
-//         const carts = [];
+      await fs.promises.writeFile(this.path, JSON.stringify(carts))
+        
+      return "Cart added"
+    } catch (error) {
+      throw new Error("Cart could not be added");
+    }
+  }
 
-//         await fs.promises.writeFile(this.path, JSON.stringify(carts));
+  async getCartsFromFile() {
+    try {
+      if (!fs.existsSync(this.path)) {
+        const carts = [];
 
-//         return carts;
-//       }
+        await fs.promises.writeFile(this.path, JSON.stringify(carts));
 
-//       const carts = JSON.parse(await fs.promises.readFile(this.path));
+        return carts;
+      }
 
-//       return carts;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
+      const carts = JSON.parse(await fs.promises.readFile(this.path));
 
-//   async getCarts(limit) {
-//     try {
-//       const carts = await this.getCartsFromFile();
+      return carts;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-//       return carts.slice(0, limit);
-//     } catch (error) {
-//       return error;
-//     }
-//   }
+  async getCarts(limit) {
+    try {
+      const carts = await this.getCartsFromFile();
 
-//   async getCartById(id) {
-//     try {
-//       const carts = await this.getCarts();
+      return carts.slice(0, limit);
+    } catch (error) {
+      return error;
+    }
+  }
 
-//       const foundCart = carts.find((cart) => cart.id === +id);
+  async getCartById(id) {
+    try {
+      const carts = await this.getCarts();
 
-//       if (foundCart) {
-//         return foundCart;
-//       } else {
-//         return null;
-//       }
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
+      const foundCart = carts.find((cart) => cart.id === +id);
 
-//   async addProductToCartById(idCart, idProduct) {
-//     try {
-//       const carts = await this.getCarts();
+      if (foundCart) {
+        return foundCart;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 
-//       let cart = { ...(await this.getCartById(idCart)) };
+  async addProductToCartById(idCart, idProduct) {
+    try {
+      const carts = await this.getCarts();
 
-//       const foundProductIndex = cart.products.findIndex(
-//         (product) => product.product === +idProduct
-//       );
+      let cart = { ...(await this.getCartById(idCart)) };
 
-//       if (foundProductIndex === -1) {
-//         cart.products.push({
-//           product: +idProduct,
-//           quantity: 1,
-//         });
-//       } else {
-//         cart.products[foundProductIndex].quantity += 1;
-//       }
+      const foundProductIndex = cart.products.findIndex(
+        (product) => product.product === +idProduct
+      );
 
-//       const foundCartIndex = carts.findIndex((cart) => cart.id === +idCart);
+      if (foundProductIndex === -1) {
+        cart.products.push({
+          product: +idProduct,
+          quantity: 1,
+        });
+      } else {
+        cart.products[foundProductIndex].quantity += 1;
+      }
 
-//       carts[foundCartIndex] = cart;
+      const foundCartIndex = carts.findIndex((cart) => cart.id === +idCart);
 
-//       const result = await fs.promises
-//         .writeFile(this.path, JSON.stringify(carts))
-//         .then(() => {
-//           return "Product added";
-//         })
-//         .catch((err) => {
-//           throw new Error("Product could not be added");
-//         });
+      carts[foundCartIndex] = cart;
 
-//       return result;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// }
+      const result = await fs.promises
+        .writeFile(this.path, JSON.stringify(carts))
+        .then(() => {
+          return "Product added";
+        })
+        .catch((err) => {
+          throw new Error("Product could not be added");
+        });
 
-// export const cartManager = new CartManager("carts.json");
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+
