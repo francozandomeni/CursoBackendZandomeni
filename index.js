@@ -1,5 +1,18 @@
-import ProductManager from "./managers/ProductManager.js"
+// import ProductManager from "./managers/ProductManager.js"
 
+
+// const productManager = new ProductManager('./files/products.json');
+
+// const newProduct = {
+//     title: 'Producto de prueba',
+//     description: 'Descripción del producto de prueba',
+//     price: 9.99,
+//     thumbnail: 'imagen.jpg',
+//     code: 'ABC123',
+//     stock: 10,
+// };
+
+// productManager.addProduct(newProduct);
 
 
 const productManager = new ProductManager('./files/products.json');
@@ -16,6 +29,7 @@ const newProduct = {
 
 
 // productManager.addProduct(newProduct);
+
 
 
 // async function devolverProductos() {
@@ -51,7 +65,7 @@ const newProduct = {
 
 // async function deleteProduct() {
 
-//     const productIdToDelete = 3;
+//     const productIdToDelete = 6;
 
 //     await productManager.deleteProduct(productIdToDelete);
 

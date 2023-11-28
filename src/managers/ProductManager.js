@@ -1,34 +1,53 @@
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import fs from 'fs/promises';
+import fs from 'fs';
+import path from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const __filename = import.meta.url.substring('file:///'.length);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, '../');
 
 export default class ProductManager {
-    constructor() {
-        this.path = join(__dirname, 'ruta', 'al', 'archivo', 'products.json');
-        this.products = [];
-        
+    constructor(pathFile) {
+        this.path = path.join(rootDir, `files`, pathFile)
+        this.idCounter = 0;
+        console.log(this.path)
+    }
+
+    async init() {
+        const products = await this.readProductsFromFile();
+        if (products.length > 0) {
+            this.idCounter = products[products.length - 1].id;
+        }
+    }
+
+    generateId() {
+        return ++this.idCounter;
     }
 
     async addProduct(product) {
         try {
+            await this.init();
             const products = await this.readProductsFromFile();
             if (this.isProductValid(product)) {
-                product.id = this.#generarId()               
-                this.products.push(product);
-                await this.writeProductsToFile(this.products);
+                product.id = this.generateId();
+                products.push(product);
+                await this.writeProductsToFile(products);
                 console.log(`Producto añadido. ID: ${product.id}`);
             }
         } catch (error) {
             console.error('Error al agregar el producto:', error);
         }
     }
-    
-    async getProducts() {
-        return this.readProductsFromFile();
+
+    async getProducts(limit = 10) {
+        const allProducts = await this.readProductsFromFile();
+
+        const limitedProducts = allProducts.slice(0, limit)
+
+        return limitedProducts
     }
+
+
 
     async getProductById(id) {
         const products = await this.readProductsFromFile();
@@ -36,43 +55,41 @@ export default class ProductManager {
         if (!product) {
             console.error('Producto no encontrado');
             return null;
-        } 
-        return product
+        }
+        return product;
+
     }
-    
-    
+
+
     async updateProduct(id, updatedProduct) {
         const products = await this.readProductsFromFile();
         const productIndex = products.findIndex((p) => p.id === id);
         if (productIndex == -1) {
             console.error('Producto no encontrado');
-        } 
+        }
+
         products[productIndex] = { ...products[productIndex], ...updatedProduct };
         await this.writeProductsToFile(products);
         console.log(`Producto actualizado. ID: ${id}`);
     }
-    
-    
+
     async deleteProduct(id) {
         const products = await this.readProductsFromFile();
-        
         const productIndex = products.findIndex((p) => p.id === id);
-    
-        if (productIndex == -1) {
-            console.error('Producto no encontrado');          
-        } 
-            const deletedProduct = products.splice(productIndex, 1)[0];
+
+        if (productIndex !== -1) {
+            products.splice(productIndex, 1);
             await this.writeProductsToFile(products);
             console.log(`Producto eliminado. ID: ${id}`);
-            console.log('Producto eliminado:', deletedProduct);
+        } else {
+            console.error('Producto no encontrado');
+        }
     }
-    
-
 
     isProductValid(product) {
         const { title, description, price, thumbnail, code, stock } = product;
         if (!title || !description || !price || !thumbnail || !code || stock === undefined) {
-            console.error('Todos los campos son obligatorios');
+            console.error('Todos los campos son obligatorios', { title, description, price, thumbnail, code, stock });
             return false;
         }
         return true;
@@ -82,43 +99,25 @@ export default class ProductManager {
 
     async readProductsFromFile() {
         try {
+
             const data = await fs.promises.readFile(this.path, 'utf-8');
-            const { products, lastId } = JSON.parse(data);
-       
-            if (products && lastId !== undefined) {
-            this.products = products;
-            return this.products
-        } else {
-            console.error("El formato del arcchivo no es valido, Verificar estructura de json")
-            return [];
-        }
+            return JSON.parse(data);
 
         } catch (error) {
-            console.error("Error al leer el archivo de productos:", error)
+            console.error('Error leyendo el archivo json:', error);
             return [];
         }
     }
 
     async writeProductsToFile(products) {
         try {
-            const lastId = this.products.length
-            ? this.#generarId() - 1
-            : 0;
-            const dataToWrite = {
-                products,
-                lastId, 
-            };
-            await fs.promises.writeFile(this.path, JSON.stringify(dataToWrite, null, 2));
+            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
         } catch (error) {
             console.error('Error al escribir en el archivo de productos');
         }
     }
-
-    #generarId() {
-        return this.products.length
-        ? this.products[this.products.length - 1].id + 1
-        : 1;
-    }
 }
+
+
 
 
