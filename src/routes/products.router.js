@@ -1,9 +1,11 @@
 import { Router } from "express"
 import ProductManager from "../managers/ProductManager.js"
+import { io } from "../../app.js"
 
 const path = "products.json"
-const router = Router();
 const productManager = new ProductManager(path)
+
+const router = Router();
 
 router.get('/', async (req, res) => {
     try {
@@ -53,6 +55,8 @@ router.post('/', async (req, res) => {
             newProduct.id = productManager.generateId();
             await productManager.addProduct(newProduct);
 
+            io.emit('newProduct', newProduct);
+
             res.status(200).json({ message: 'Producto añadido correctamente', product: newProduct });
         } else {
             res.status(400).json({ error: 'Producto no válido' });
@@ -101,6 +105,8 @@ router.delete('/:id', async (req, res) => {
 
         // Elimina el producto
         await productManager.deleteProduct(productId);
+
+        io.emit('productDeleted', productId);
 
         return res.status(200).json({ message: 'Producto eliminado correctamente' });
     } catch (error) {

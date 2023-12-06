@@ -89,7 +89,7 @@ export default class ProductManager {
     isProductValid(product) {
         const { title, description, price, thumbnail, code, stock } = product;
         if (!title || !description || !price || !thumbnail || !code || stock === undefined) {
-            console.error('Todos los campos son obligatorios', { title, description, price, thumbnail, code, stock });
+            console.error('Todos los campos son obligatorios', error );
             return false;
         }
         return true;
