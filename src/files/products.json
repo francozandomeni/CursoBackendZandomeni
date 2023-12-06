@@ -196,5 +196,14 @@
     "code": "undostres",
     "stock": "99",
     "id": 22
+  },
+  {
+    "title": "producto de prueba",
+    "description": "producttto de pruebaa",
+    "price": "555",
+    "thumbnail": "wep.jpg",
+    "code": "abcdef",
+    "stock": "35",
+    "id": 23
   }
 ]

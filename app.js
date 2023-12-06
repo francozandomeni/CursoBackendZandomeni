@@ -43,7 +43,7 @@ const productManager = new ProductManager(pathPm)
 
 // Configuración de Socket.io
 io.on('connection', (socket) => {
-    console.log('Usuario conectado');
+    console.log('Usuario conectado. ID:', socket.id);
 
     // Emitir la lista de productos a la vista de tiempo real
     io.to(socket.id).emit('updateProducts', [productManager.getProducts()]);
@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 
     // Desconexión del usuario
     socket.on('disconnect', () => {
-        console.log('Usuario desconectado');
+        console.log('Usuario desconectado. ID:', id);
     });
 });
 export { io };

@@ -13,13 +13,15 @@ const productManager = new ProductManager(pathPm)
 
 const router = Router()
 
-router.get('/', (req, res) => {
-    res.render('home', { products: productManager.getProducts() });
+router.get('/', async (req, res) => {
+    const allProducts = await productManager.getProducts()
+    res.render('home', { products: allProducts });
 });
 
-router.get('/realtimeproducts', (req, res) => {
+router.get('/realtimeproducts', async (req, res) => {
     const viewPath = path.join(__dirname, '../views/layouts/realTimeProducts');
-    res.render(viewPath, { products: productManager.getProducts() });
+    const allProducts = await productManager.getProducts()
+    res.render(viewPath, { products: allProducts });
 });
 
 export default router
