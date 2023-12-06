@@ -44,7 +44,7 @@ export default class ProductManager {
 
         const limitedProducts = allProducts.slice(0, limit)
 
-        return limitedProducts
+        return Array.isArray(limitedProducts) ? limitedProducts : [];
     }
 
 

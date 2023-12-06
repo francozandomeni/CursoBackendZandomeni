@@ -46,20 +46,20 @@ io.on('connection', (socket) => {
     console.log('Usuario conectado');
 
     // Emitir la lista de productos a la vista de tiempo real
-    io.to(socket.id).emit('updateProducts', productManager.getProducts());
+    io.to(socket.id).emit('updateProducts', [productManager.getProducts()]);
 
     // Manejar la creación de nuevos productos
     socket.on('createProduct', (newProduct) => {
         productManager.addProduct(newProduct);
         // Emitir la actualización de productos a todos los clientes
-        io.emit('updateProducts', productManager.getProducts());
+        io.emit('updateProducts', [productManager.getProducts()]);
     });
 
     // Manejar la eliminación de productos
     socket.on('deleteProduct', (productId) => {
         productManager.deleteProduct(productId);
         // Emitir la actualización de productos a todos los clientes
-        io.emit('updateProducts', productManager.getProducts());
+        io.emit('updateProducts', [productManager.getProducts()]);
     });
 
     // Desconexión del usuario

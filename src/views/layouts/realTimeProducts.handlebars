@@ -6,11 +6,20 @@
     <title>Real Time Products</title>
 </head>
 <body>
- <h1>Lista de Productos en Tiempo Real</h1>
+     <h1>Lista de Productos en Tiempo Real</h1>
     <ul id="productList">
         {{#each products}}
-            <li>{{this.name}} <button class="delete-product" data-product-id="{{this.id}}">Eliminar</button></li>
+            <li>
+                <strong>{{this.title}}</strong>
+                <p>Description: {{this.description}}</p>
+                <p>Precio: ${{this.price}}</p>
+                <p>Thumbnail: <img src="{{this.thumbnail}}" alt="Thumbnail"></p>
+                <p>Code: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <button class="delete-product" data-product-id="{{this.id}}">Eliminar</button>
+            </li>
         {{/each}}
+    </ul>
     </ul>
     <form id="productForm">
         <label for="productName">Nombre del Producto:</label>
