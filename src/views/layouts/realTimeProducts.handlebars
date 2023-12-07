@@ -16,10 +16,10 @@
                 <p>Thumbnail: <img src="{{this.thumbnail}}" alt="Thumbnail"></p>
                 <p>Code: {{this.code}}</p>
                 <p>Stock: {{this.stock}}</p>
+                <p>ID: {{this.id}}</p>
                 <button class="delete-product" data-product-id="{{this.id}}">Eliminar</button>
             </li>
         {{/each}}
-    </ul>
     </ul>
     <form id="productForm">
         <label for="productName">Nombre del Producto:</label>
@@ -44,6 +44,6 @@
         <button type="submit">Agregar Producto</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/index.js"></script>
+    <script type="module" src="/js/index.js"></script>
 </body>
 </html>

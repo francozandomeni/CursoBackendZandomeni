@@ -39,12 +39,9 @@ export default class ProductManager {
         }
     }
 
-    async getProducts(limit = 10) {
+    async getProducts() {
         const allProducts = await this.readProductsFromFile();
-
-        const limitedProducts = allProducts.slice(0, limit)
-
-        return Array.isArray(limitedProducts) ? limitedProducts : [];
+        return allProducts;
     }
 
 

@@ -37,34 +37,39 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter)
 app.use("/", viewRouter)
 
-//ProductManager
+// //ProductManager
 const pathPm = "products.json"
 const productManager = new ProductManager(pathPm)
 
 // Configuración de Socket.io
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('Usuario conectado. ID:', socket.id);
 
-    // Emitir la lista de productos a la vista de tiempo real
-    io.to(socket.id).emit('updateProducts', [productManager.getProducts()]);
+    try {
+        const products = await productManager.getProducts();
+        io.to(socket.id).emit('updateProducts', [products]);
+    } catch (error) {
+        console.error('Error al obtener la lista de productos:', error);
+    }
 
-    // Manejar la creación de nuevos productos
-    socket.on('createProduct', (newProduct) => {
-        productManager.addProduct(newProduct);
-        // Emitir la actualización de productos a todos los clientes
-        io.emit('updateProducts', [productManager.getProducts()]);
+    socket.on('createProduct', async (Product) => {
+        productManager.addProduct(Product);
+        
+        try {
+            const updatedProducts = await productManager.getProducts();
+            io.emit('updateProducts', [updatedProducts]);
+            console.log('Productos actualizados:', [updatedProducts]);
+        } catch (error) {
+            console.error('Error al obtener la lista de productos:', error);
+        }
     });
+    
 
-    // Manejar la eliminación de productos
-    socket.on('deleteProduct', (productId) => {
-        productManager.deleteProduct(productId);
-        // Emitir la actualización de productos a todos los clientes
-        io.emit('updateProducts', [productManager.getProducts()]);
-    });
+
 
     // Desconexión del usuario
     socket.on('disconnect', () => {
-        console.log('Usuario desconectado. ID:', id);
+        console.log('Usuario desconectado. ID:', socket.id);
     });
 });
 export { io };

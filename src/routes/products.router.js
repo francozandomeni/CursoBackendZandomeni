@@ -9,14 +9,16 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit);
 
-        const products = await productManager.getProducts(limit)
+        const products = await productManager.getProducts()
 
-        if (!products.length) {
+        const limitedProducts = limit ? products.slice(0, limit) : products;
+
+        if (!limitedProducts.length) {
             res.status(200).json({ message: "No products found" })
         } else {
-            res.status(200).json({ message: "Products found", products })
+            res.status(200).json({ message: "Products found", products: limitedProducts })
 
         }
     }
