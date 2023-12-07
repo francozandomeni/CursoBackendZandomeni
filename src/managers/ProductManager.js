@@ -39,12 +39,9 @@ export default class ProductManager {
         }
     }
 
-    async getProducts(limit = 10) {
+    async getProducts() {
         const allProducts = await this.readProductsFromFile();
-
-        const limitedProducts = allProducts.slice(0, limit)
-
-        return limitedProducts
+        return allProducts;
     }
 
 
@@ -89,7 +86,7 @@ export default class ProductManager {
     isProductValid(product) {
         const { title, description, price, thumbnail, code, stock } = product;
         if (!title || !description || !price || !thumbnail || !code || stock === undefined) {
-            console.error('Todos los campos son obligatorios', { title, description, price, thumbnail, code, stock });
+            console.error('Todos los campos son obligatorios', error );
             return false;
         }
         return true;

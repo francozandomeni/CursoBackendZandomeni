@@ -1,20 +1,24 @@
 import { Router } from "express"
 import ProductManager from "../managers/ProductManager.js"
+import { io } from "../../app.js"
 
 const path = "products.json"
-const router = Router();
 const productManager = new ProductManager(path)
+
+const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit);
 
-        const products = await productManager.getProducts(limit)
+        const products = await productManager.getProducts()
 
-        if (!products.length) {
+        const limitedProducts = limit ? products.slice(0, limit) : products;
+
+        if (!limitedProducts.length) {
             res.status(200).json({ message: "No products found" })
         } else {
-            res.status(200).json({ message: "Products found", products })
+            res.status(200).json({ message: "Products found", products: limitedProducts })
 
         }
     }
@@ -52,6 +56,8 @@ router.post('/', async (req, res) => {
         if (productManager.isProductValid(newProduct)) {
             newProduct.id = productManager.generateId();
             await productManager.addProduct(newProduct);
+
+            io.emit('newProduct', newProduct);
 
             res.status(200).json({ message: 'Producto añadido correctamente', product: newProduct });
         } else {
@@ -101,6 +107,8 @@ router.delete('/:id', async (req, res) => {
 
         // Elimina el producto
         await productManager.deleteProduct(productId);
+
+        io.emit('productDeleted', productId);
 
         return res.status(200).json({ message: 'Producto eliminado correctamente' });
     } catch (error) {
