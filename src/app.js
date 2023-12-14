@@ -1,12 +1,12 @@
 import express from 'express';
-import ProductManager from './src/managers/ProductManager.js';
-import { productsRouter } from './src/routes/products.router.js';
-import { cartsRouter } from './src/routes/carts.router.js';
+import ProductManager from './managers/ProductManager.js';
+import { productsRouter } from './routes/products.router.js';
+import { cartsRouter } from './routes/carts.router.js';
 import { engine } from "express-handlebars"
 import { Server } from "socket.io"
 import fs from 'fs';
 import path from 'path';
-import viewRouter from "./src/routes/views.router.js"
+import viewRouter from "./routes/views.router.js"
 
 //dirname
 const __filename = import.meta.url.substring('file:///'.length);
@@ -25,10 +25,10 @@ const io = new Server(httpServer)
 //handlebars
 app.engine("handlebars", engine({ defaultLayout: 'main', extname: 'handlebars' }))
 app.set("view engine", "handlebars")
-app.set("views", path.join(__dirname, "/src/views"))
+app.set("views", path.join(__dirname, "/views"))
 
 //express
-app.use(express.static(path.join(__dirname, '/src/public')));
+app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

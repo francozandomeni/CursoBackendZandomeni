@@ -205,5 +205,14 @@
     "code": "abcdef",
     "stock": "24",
     "id": 23
+  },
+  {
+    "title": "producto de prueba",
+    "description": "pdp",
+    "price": "24",
+    "thumbnail": "08",
+    "code": "24",
+    "stock": "08",
+    "id": 24
   }
 ]

@@ -1,6 +1,6 @@
 import { Router } from "express"
 import ProductManager from "../managers/ProductManager.js"
-import { io } from "../../app.js"
+import { io } from "../app.js"
 
 const path = "products.json"
 const productManager = new ProductManager(path)
