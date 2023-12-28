@@ -19,6 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(`${__dirname}/public`))
 
+
 const httpServer = app.listen(PORT, () => {
     console.log(`Servidor funcionando en el puerto ${PORT}`)
 })
@@ -31,6 +32,8 @@ app.set("views", `${__dirname}/views`)
 app.use("/", viewRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/carts", cartRoutes)
+
+
 
 let messages = [];
 

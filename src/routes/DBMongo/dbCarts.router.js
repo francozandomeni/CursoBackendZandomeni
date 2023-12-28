@@ -1,15 +1,14 @@
 import {Router} from "express"
-import cartsModel from "../../dao/models/carts.model.js"
-import productModel from "../../dao/models/products.model.js";
+import cartsModel from "../../dao/models/carts.model.js";
+import cartManager from "../../dao/DBManagers/CartManagerDB.js"
 
 const router = Router();
 
-
+const cartManagerMongo = new cartManager()
 
 router.post('/', async (req, res) => {
   try {
-    const newCart = await cartsModel.create({});
-    console.log('Nuevo carrito creado:', newCart);
+    const newCart = await cartManagerMongo.addCart();
     res.status(200).json(newCart);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -19,7 +18,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:cid', async (req, res) => {
   try {
-    const cart = await cartsModel.findById(req.params.cid).populate('products');
+    const cart = await cartManagerMongo.getCartById(req.params.cid);
     res.status(200).json(cart.products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -29,29 +28,35 @@ router.get('/:cid', async (req, res) => {
 
 router.post('/:cid/product/:pid', async (req, res) => {
   try {
-    const cart = await cartsModel.findById(req.params.cid);
-
+    const { cid, pid } = req.params;
+    const result = await cartManagerMongo.addProductToCartById(cid, pid);
+    res.status(200).json(result);
     
-    const existingProduct = cart.products.find(
-      (item) => item.product.toString() === req.params.pid
-    );
-
-    if (existingProduct) {
-      // Si el producto ya existe, incrementar la cantidad
-      existingProduct.quantity += 1;
-    } else {
-      // Si el producto no existe, agregarlo al carrito
-      cart.products.push({
-        product: req.params.pid,
-        quantity: 1,
-      });
-    }
-
-    await cart.save();
-    res.status(201).json(cart.products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.delete('/:cid/product/:pid', async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const result = await cartManagerMongo.removeProductFromCartById(cid, pid);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.put('/:cid/product/:pid', async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+    const result = await cartManagerMongo.updateProductQuantityInCart(cid, pid, quantity);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 export default router
