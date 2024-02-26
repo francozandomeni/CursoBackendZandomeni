@@ -1,12 +1,12 @@
 <div>
-    <h1>Bienvenido {{user.full_name}}!</h1>
+    <h1>Bienvenido {{user.first_name}}!</h1>
     <p>Email: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
     <a href="/api/sessions/logout"><button>Salir</button></a>
 </div>
 
   <h1>Lista de Productos</h1>
-
+  {{#if productos}}
   {{#each productos}}
     <div class="product">
       <h2>{{this.title}}</h2>
@@ -19,6 +19,9 @@
       <!-- Agrega más detalles según sea necesario -->
     </div>
   {{/each}}
+  {{else}}
+    <p>No hay productos disponibles</p>
+    {{/if}}
 
   <div class="pagination">
     {{#if hasPrevPage}}

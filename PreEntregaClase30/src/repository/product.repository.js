@@ -3,16 +3,16 @@ export class ProductRepository{
     constructor(dao) {
         this.dao = dao
     }
+    
+        async getProducts(page, limit, sort) {
+            const products = await this.dao.get(page, limit, sort)
+            return products
+    
+        }
 
     async addProduct(product) {
         const newProduct = await this.dao.add(product)
         return newProduct
-    }
-
-    async getProducts(options = { page: 1, limit: 10, sort: null }) {
-        const products = await this.dao.get(options = { page: 1, limit: 10, sort: null })
-        return products
-
     }
 
 
@@ -36,3 +36,5 @@ export class ProductRepository{
 
 
 export default ProductRepository
+
+// Incorrect DAO Usage: In the 'ProductRepository' class, when calling the 'this.dao.get()' method, you are passing the options object incorrectly. Instead of passing it as an object, you should pass it as individual parameters like so: 'this.dao.get(page, limit, sort)'. Additionally, ensure that the 'get' method in your 'ProductManager' class can receive these individual parameters.

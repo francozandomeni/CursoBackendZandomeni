@@ -10,10 +10,6 @@ export default class CartManager {
 
   }
 
-  // async saveCart(newCart){
-  //    const saveCart = await cartsModel.save()
-  //    return saveCart
-  // }
 
   async get() {
     const carts = await cartsModel.find()
@@ -134,6 +130,61 @@ export default class CartManager {
   }
 }
 
+async updateCart(cid, updatedProducts) {
+  try {
+      const cart = await cartsModel.findOne({ _id: cid });
+  
+      if (!cart) {
+          throw new Error(`Carrito con ID ${cid} no encontrado.`);
+      }
+  
+      cart.products = updatedProducts;
+  
+      await cart.save();
+  
+      return cart;
+  } catch (error) {
+      console.error(`Error al actualizar el carrito con ID ${cartId}: ${error.message}`);
+      throw error;
+  }
+}
+
+async deleteCart(cid) {
+  try {
+      const result = await cartsModel.deleteOne({ _id: cid });
+
+      if (result.deleteCount > 0) {
+          console.log(`Carrito con ID ${cid} eliminado exitosamente`);
+          return true;
+      } else {
+          throw new Error(`Carrito con ID ${cid} no encontrado.`);
+      }
+  } catch (error) {
+      console.error(`Error al eliminar el carrito con ID ${cid}: ${error.message}`);
+      throw error;
+  }
+}
+
+
+async deleteAllFromCart(cid) {
+  try {
+      const cart = await cartsModel.findOne({ _id: cid });
+
+      if (!cart) {
+          throw new Error(`Carrito con ID ${cid} no encontrado.`);
+      }
+
+      cart.products = [];
+
+      await cart.save();
+
+      console.log(`Todos los productos del carrito con ID ${cid} han sido eliminados`);
+      return cart;
+  } catch (error) {
+      console.error(`Error al eliminar todos los productos del carrito con ID ${cartId}: ${error.message}`);
+      throw error;
+  }
+}
 
 }
 

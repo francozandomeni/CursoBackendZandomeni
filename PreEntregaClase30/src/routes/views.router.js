@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ViewsController } from "../controllers/views.controller.js"
+import passport from "passport";
 
 const router = Router();
 

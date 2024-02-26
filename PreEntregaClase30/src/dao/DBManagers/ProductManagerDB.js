@@ -13,7 +13,7 @@ export default class ProductManager {
 
 //utilizar URLs como http://localhost:8080//products?sort=asc&category=Zapatillas&stock=true
     
-    async get(options = { page: 1, limit: 10, sort: null }) {
+    async get(options = { page: 1, limit: 10, sort: null}) {
         try {
             const filters = {};
             if (options.category) {
@@ -23,15 +23,17 @@ export default class ProductManager {
                 filters.stock = options.stock;
             }
 
-
             const products = await productModel.paginate(filters, options);
+
 
             const { totalDocs, limit, page, totalPages, hasNextPage, hasPrevPage, nextPage, prevPage } = products;
 
+
             return {
+                
                 status: "success",
                 msg: {
-                    docs: products.docs,  // La lista de productos
+                    docs: products.docs,  // List of products
                     totalDocs,
                     limit,
                     page,

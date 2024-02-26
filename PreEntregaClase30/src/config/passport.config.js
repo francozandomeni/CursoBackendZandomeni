@@ -70,6 +70,7 @@ const inicializePassport = () => {
         try{
             // console.log(user)
             done(null, user._id)
+            // console.log("serialize",user)
 
         } catch (error) {
             console.error(error)
@@ -80,6 +81,7 @@ const inicializePassport = () => {
     passport.deserializeUser(async (id,done)=>{
         let user = await userService.getUserById(id);
         done(null, user);
+        // console.log("deserialize",user)
     });
 
     passport.use('github', new GitHubStrategy({

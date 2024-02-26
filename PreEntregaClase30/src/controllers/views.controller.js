@@ -15,17 +15,23 @@ class ViewsController {
 
     static privateAccessProducts = async (req, res) => {
         try {
+          
           const { limit, page, sort, category, price, stock } = req.query;
+          // console.log("views controller0",req.query)
+          
           const options = {
             limit: parseInt(limit) || 10,
                 page: parseInt(page) || 1,
                 sort: sort === "asc" ? { price: 1 } : sort === "dsc" ? { price: -1 } : null,
                 category: category || null,
-                stock: stock !== undefined ? stock === 'true' : null,
+                stock: stock !== undefined ? stock === "true" : null,
                 lean: true,
           };
       
           const products = await productService.getProducts(options);
+          // console.log("views controller1", products)
+          // console.log("views controller2", options)
+          
           
       
       
@@ -39,7 +45,8 @@ class ViewsController {
             user:req.session.user
             
           });
-          // console.log(user)
+          console.log(products.msg.docs)
+         
         } catch (error) {
             console.error("error en la ruta /products:", error)
           res.status(500).json({ message: error.message });

@@ -8,18 +8,20 @@ export class CartRepository {
         return newCart
     }
 
-    async getCart() {
-        const result = await this.dao.get()
-        return result
+    async getCarts() {
+        
+            const carts = await this.dao.get();
+            return carts;
+        
     }
 
     async getCartById(cid) {
         const cart = await this.dao.getById(cid)
         return cart
     }
-
-    async addProductById(cid, pid, quantity = 1){
-        const addToCart = await this.dao.addProductToCartById()
+ 
+    async addProductById(cid, pid){
+        const addToCart = await this.dao.addProductToCartById(cid, pid)
         return addToCart
     }
     async deleteProductById(cid, pid){
@@ -32,9 +34,21 @@ export class CartRepository {
         return deleteFromCart
     }
 
-    // async saveCart(newCart){
-    //     const saveCart = await this.dao.saveCart(newCart)
-    //     return saveCart
-    //   }
+    async updateCart(cid, updatedProducts) {
+        const deleteCart = await this.dao.updateCart(cid, updatedProducts)
+        return deleteCart
+    }
+
+    async deleteCart(cid) {
+        const deleteCart = await this.dao.deleteCart(cid)
+        return deleteCart
+    }
+
+
+    async deleteAllFromCart(cid) {
+        const deleteAll = await this.dao.deleteAllFromCart(cid)
+        return deleteAll
+    }
+
 
 }

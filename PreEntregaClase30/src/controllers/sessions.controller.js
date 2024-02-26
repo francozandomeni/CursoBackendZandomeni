@@ -1,3 +1,4 @@
+import { GetUserDto } from "../dao/dto/users.dto.js";
 
 class SessionsController {
     static register = async (req, res) => {
@@ -9,7 +10,7 @@ class SessionsController {
 
 
             await req.user.save();
-
+            console.log("sessions controller register", req.session.user)
             res.send({
                 status: "success",
                 message: "Usuario registrado exitosamente"
@@ -45,6 +46,7 @@ class SessionsController {
             email: req.user.email,
             role: req.user.role
         }
+        console.log("sessions login controller", req.session.user)
         res.send({
             status: "success",
             payload: req.session.user
@@ -73,18 +75,28 @@ class SessionsController {
     }
 
     static currentUser = (req, res) => {
-        // Devolver la información del usuario autenticado
-        res.send({
-            status: "success",
-            user: {
-                first_name: req.user.first_name,
-                last_name: req.user.last_name,
-                age: req.user.age,
-                email: req.user.email,
-                role: req.user.role,
-            },
-        });
+        try {
+            if (req.session && req.session.user) {
+              const userDTO = new GetUserDto(req.session.user);
+              res.status(200).json({
+                status: "success",
+                user: userDTO
+              });
+            } else {
+              res.status(401).json({
+                status: "error",
+                message: "No hay sesión de usuario activa"
+              });
+            }
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({
+              status: "error",
+              message: "Error al obtener el usuario actual"
+            })
+          }
+        }
     }
-}
+
 
 export { SessionsController }

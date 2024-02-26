@@ -10,7 +10,9 @@ class ProductsController {
                 limit: parseInt(limit) || 10,
                 page: parseInt(page) || 1,
                 sort: { price: sort === "asc" ? 1 : -1 },
+                price: parseFloat(price),
                 lean: true,
+                
             };
 
             const products = await productService.getProducts(options);
