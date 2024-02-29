@@ -3,6 +3,10 @@ import productModel from "../models/products.model.js";
 export default class ProductManager {
 
 
+    async save(){
+        const save = await productModel.save()
+    }
+
     async add(product) {
         const result = await productModel.create(product)
         return {
@@ -55,13 +59,13 @@ export default class ProductManager {
 
 
     async getById(pid) {
-        const product = await productModel.find({ _id: pid })
+        const product = await productModel.findById(pid)
         return {
             status: "success",
-            msg: product
+            product
         }
     }
-
+ 
 
     async update(pid, updatedProduct) {
         const result = await productModel.findByIdAndUpdate(pid, updatedProduct, { new: true }).lean();

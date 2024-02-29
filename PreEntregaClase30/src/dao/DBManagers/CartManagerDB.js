@@ -16,6 +16,7 @@ export default class CartManager {
     return carts
   }
 
+  
   async getById(cid) {
     const cart = await cartsModel.findById(cid).populate("products");
     return cart;
@@ -184,7 +185,11 @@ async deleteAllFromCart(cid) {
       console.error(`Error al eliminar todos los productos del carrito con ID ${cartId}: ${error.message}`);
       throw error;
   }
-}
+} 
+
+   async purchase(){
+    
+   }
 
 }
 

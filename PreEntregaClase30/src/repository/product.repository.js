@@ -3,6 +3,11 @@ export class ProductRepository{
     constructor(dao) {
         this.dao = dao
     }
+
+    async save(){
+        const save = await this.dao.save()
+        return save
+    }
     
         async getProducts(page, limit, sort) {
             const products = await this.dao.get(page, limit, sort)
@@ -18,7 +23,7 @@ export class ProductRepository{
 
     async getProductById(pid) {
         const product = await this.dao.getById(pid)
-        return product
+        return product 
     }
 
     async updateProduct(pid, updatedProduct){
