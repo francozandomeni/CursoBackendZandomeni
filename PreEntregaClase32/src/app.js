@@ -14,6 +14,7 @@ import { options } from "./config/config.js"
 import messageModel from "./dao/models/messages.model.js"
 import {Server} from "socket.io"
 import { connectDB } from "./config/dbConnection.js"
+import mockingRouter from "./routes/mock.router.js"
 
 //(el index) es el intermediario entre repository y managers
 // connectDB()
@@ -52,6 +53,7 @@ app.use("/", viewRoutes)
 app.use("/api/sessions", sessionRouter)
 app.use("/productos", DbProductsRouter)
 app.use("/api/carts", cartRoutes)
+app.use("/api", mockingRouter)
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Servidor funcionando en el puerto ${PORT}`)
