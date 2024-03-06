@@ -1,6 +1,7 @@
 import { productService } from "../repository/index.js";
-
-
+import {CustomError} from "../services/customError.service.js"
+import {generateProductErrorInfo} from "../services/ProductErrorinfo.js"
+import {EError} from "../enums/EError.js"
 
 class ProductsController {
 
@@ -51,59 +52,45 @@ class ProductsController {
         }
     };
 
-    static add = async (req, res) => {
-        const { title, description, price, thumbnail, code, stock, category } = req.body;
-
-        const propertiesToCheck = ['title', 'description', 'price', 'thumbnail', 'code', 'stock', 'category'];
-
-        let test = 0;
-
-        propertiesToCheck.forEach(property => {
-            if (!req.body[property]) {
-                console.log(`MISSING '${property}' PROPERTY`);
-            } else {
-
-                test++;
+        static add = async (req, res, next) => {
+            const { title, description, price, thumbnail, code, stock, category } = req.body;
+            let responseSent = false;
+    
+            try {
+                if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+                    throw CustomError.createError({
+                        name: "Product create error",
+                        cause: generateProductErrorInfo(req.body),
+                        message: "Error creando el producto",
+                        errorCode: EError.EMPTY_FIELDS
+                    });
+                }
+    
+                const product = {
+                    title,
+                    description,
+                    price,
+                    thumbnail,
+                    code,
+                    stock
+                };
+    
+                const result = await productService.addProduct(product);
+                if (!responseSent) {
+                    responseSent = true;
+                    return res.status(200).json(result);
+                }
+            } catch (error) {
+                if (!responseSent) {
+                    next(error); // Pass the error to the next middleware for error handling
+                }
             }
-        });
-
-        console.log(`${test} product properties of ${propertiesToCheck.length}, received from POST method.
-        All properties required:
-        TITLE: ------- type: String.
-        DESCRIPTION:-- type: String. 
-        PRICE: ------- type: Number. 
-        THUMBNAIL: --- type: String, unique: true.
-        CODE: -------- type: Number.
-        STOCK:-------- type: Number.
-        CATEGORY:----- type: String.`);
-
-
-        if (test !== propertiesToCheck.length) {
-            return res.status(400).json({ message: "Missing properties" });
-        }
+        };
+    
+    
 
 
 
-        const product = {
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock,
-            category
-
-        }
-
-        try {
-            const result = await productService.addProduct(product);
-            console.log("PRODUCT HAS BEEN ADDED CORRECTLY. FOUND ALL PROPERTIES REQUIRED ")
-            res.status(200).json(result);
-
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    };
 
     static update = async (req, res) => {
         const pid = req.params.pid;

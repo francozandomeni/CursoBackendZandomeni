@@ -12,12 +12,10 @@ import initializePassport from "./config/passport.config.js"
 import { options } from "./config/config.js"
 // import { transporter } from "./config/gmail.js"
 import messageModel from "./dao/models/messages.model.js"
-import {Server} from "socket.io"
+import { Server } from "socket.io"
 import { connectDB } from "./config/dbConnection.js"
 import mockingRouter from "./routes/mock.router.js"
-
-//(el index) es el intermediario entre repository y managers
-// connectDB()
+// import { errorHandler } from './middleware/errorHandler.js';
 
 const PORT = options.server.port || 8080
 
@@ -55,6 +53,9 @@ app.use("/productos", DbProductsRouter)
 app.use("/api/carts", cartRoutes)
 app.use("/api", mockingRouter)
 
+// app.use(errorHandler)
+
+
 const httpServer = app.listen(PORT, () => {
     console.log(`Servidor funcionando en el puerto ${PORT}`)
 })
@@ -64,16 +65,16 @@ let messages = [];
 
 const io = new Server(httpServer);
 
-io.on("connection", (socket)=>{
+io.on("connection", (socket) => {
     
-    socket.on("chat-message", async (data)=>{
+    socket.on("chat-message", async (data) => {
         const message = { username: data.username, message: data.message };
-         await messageModel.create(message);
+        await messageModel.create(message);
         messages.push(data);
         io.emit("messages", messages);
     })
 
-    socket.on("new-user", (username)=>{
+    socket.on("new-user", (username) => {
         socket.emit("messages", messages);
         socket.broadcast.emit("new-user", username);
     })
