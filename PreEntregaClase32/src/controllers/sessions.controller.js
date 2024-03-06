@@ -1,13 +1,29 @@
 import { GetUserDto } from "../dao/dto/users.dto.js";
+import {CustomError} from "../services/customError.service.js"
+import {generateUserErrorInfo} from "../services/UserErrorInfo.js"
+import {EError} from "../enums/EError.js"
 
 class SessionsController {
     static register = async (req, res) => {
         try {
+            
 
             if (req.body.email === "franco@coder.com" && req.body.password === "adminCoderfranco123") {
                 req.user.role = "admin";
             }
 
+            const { first_name, last_name, email } = req.body;
+        
+
+            if (!first_name || !last_name || !email) {
+                throw CustomError.createError({
+                      name:"User create error",
+                      cause: generateUserErrorInfo(req.body),
+                      message:"Error creando el usuario",
+                      errorCode: EError.EMPTY_FIELDS
+                 })
+                }
+            
 
             await req.user.save();
             console.log("sessions controller register", req.session.user)

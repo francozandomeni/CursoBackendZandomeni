@@ -1,6 +1,6 @@
 import { productService } from "../repository/index.js";
 import {CustomError} from "../services/customError.service.js"
-import {generateProductErrorInfo} from "../services/ProductErrorinfo.js"
+import {generateProductErrorInfo} from "../services/ProductErrorInfo.js"
 import {EError} from "../enums/EError.js"
 
 class ProductsController {
@@ -52,42 +52,45 @@ class ProductsController {
         }
     };
 
-        static add = async (req, res, next) => {
-            const { title, description, price, thumbnail, code, stock, category } = req.body;
-            let responseSent = false;
-    
-            try {
-                if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
-                    throw CustomError.createError({
-                        name: "Product create error",
-                        cause: generateProductErrorInfo(req.body),
-                        message: "Error creando el producto",
-                        errorCode: EError.EMPTY_FIELDS
-                    });
-                }
-    
-                const product = {
-                    title,
-                    description,
-                    price,
-                    thumbnail,
-                    code,
-                    stock
-                };
-    
-                const result = await productService.addProduct(product);
-                if (!responseSent) {
-                    responseSent = true;
-                    return res.status(200).json(result);
-                }
-            } catch (error) {
-                if (!responseSent) {
-                    next(error); // Pass the error to the next middleware for error handling
-                }
+    static add = async (req, res) => {
+        const { title, description, price, thumbnail, code, stock, category } = req.body;
+
+        
+        try {
+            if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+                throw CustomError.createError({
+                      name:"Product create error",
+                      cause: generateProductErrorInfo(req.body),
+                      message:"Error creando el producto",
+                      errorCode: EError.EMPTY_FIELDS
+                 })
+      
+                 
+      
+              }
+        
+        const product = {
+            title,
+            description,
+            price,
+            thumbnail,
+            code,
+            stock,
+            category
+
+        }
+
+            const result = await productService.addProduct(product);
+            res.status(200).json(result);
+        } catch (error) {
+            if (error.cause) {
+                res.status(400).json({ message: error.message, cause: error.cause });
+            } else {
+                res.status(500).json({ message: error.message });
             }
-        };
+        }
     
-    
+    };
 
 
 

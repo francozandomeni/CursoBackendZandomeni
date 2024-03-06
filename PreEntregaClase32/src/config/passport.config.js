@@ -4,6 +4,9 @@ import userModel from "../dao/models/Users.models.js";
 import {createHash, validatePassword} from "../utils.js";
 import GitHubStrategy from "passport-github2"
 import { cartService, userService } from "../repository/index.js";
+// import {CustomError} from "../services/customError.service.js"
+// import {generateUserErrorInfo} from "../services/UserErrorInfo.js"
+// import {EError} from "../enums/EError.js"
 
 const LocalStrategy = local.Strategy;
 
@@ -18,12 +21,13 @@ const inicializePassport = () => {
 
         const { first_name, last_name, email, age } = req.body;
         try {
-            
+
             let user = await userModel.findOne({email:username});
             if(user){
                 console.log('Usuario ya registrado');
                 return done(null,false)
             }
+
 
             const newCart = await cartService.createCart({ products: [] });
             await newCart.save();
@@ -43,7 +47,7 @@ const inicializePassport = () => {
 
         } catch (error) {
             return done(error)
-        }    
+        }
 
     }));
 
@@ -59,7 +63,7 @@ const inicializePassport = () => {
             if(!validatePassword(password, user)){
                 console.log("contrasenia desconocida")
                 return done(null, false);
-            } 
+            }
             return done(null,user)
         } catch (error) {
             return done(error);
@@ -101,7 +105,7 @@ const inicializePassport = () => {
             if(user){
                 console.log('Usuario ya registrado');
                 return done(null,false)
-                
+
             }
 
             const newUser = {
@@ -122,10 +126,10 @@ const inicializePassport = () => {
 
     // passport.use("current", new LocalStrategy(
 
-    
+
 }
 
-    
+
 
 
 export default inicializePassport;

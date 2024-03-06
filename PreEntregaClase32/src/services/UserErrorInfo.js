@@ -3,6 +3,6 @@ export const generateUserErrorInfo = (user) =>{
     Algunos campos obligatorios para crear al usuario vinieron vacios:
     first_name: llego ${user.first_name},
     last_name: llego ${user.last_name},
-    email: tiene que ser del tipo string, pero llego: ${user.emil}
+    email: tiene que ser del tipo string, pero llego: ${user.email}
     `
 }

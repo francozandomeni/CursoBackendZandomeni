@@ -36,4 +36,8 @@ const isAuthenticated = (req, res, next) => {
   
   router.get("/current", isAuthenticated, SessionsController.currentUser);
 
+  router.use((err, req, res, next) => {
+    errorHandler(err, req, res, next);
+});
+
 export default router;
