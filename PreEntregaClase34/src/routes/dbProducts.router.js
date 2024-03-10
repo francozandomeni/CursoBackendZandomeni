@@ -8,7 +8,7 @@ const router = Router()
 router.get('/', ProductsController.get)
 router.get('/:pid',addLogger, ProductsController.getById);
 router.post('/' , addLogger ,ProductsController.add);
-router.put('/:pid', ProductsController.update);
+router.put('/:pid',addLogger, ProductsController.update);
 router.delete('/:pid',  ProductsController.delete);
 
 router.use((err, req, res, next) => {

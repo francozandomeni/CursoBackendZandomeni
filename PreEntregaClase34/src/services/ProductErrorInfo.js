@@ -8,3 +8,8 @@ export const generateProductErrorInfo = (product) =>{
     --CATEGORY: type: String. INFO RECIEVED: ${product.category}`
     
 }
+
+export const generateProductActualizationError = (missingFieldsInfo) => {
+
+    return `Some product fields required to update the product are missing or incorrect: \n${missingFieldsInfo}`;
+}
