@@ -11,7 +11,7 @@ class ViewsController {
   }
 
   static products = (req, res) => {
-    res.render('products', { user: req.session.user })
+    res.render('productos', { user: req.session.user })
   }
 
   static privateAccessProducts = async (req, res) => {
@@ -37,7 +37,7 @@ class ViewsController {
 
 
 
-      res.render("products", {
+      res.render("productos", {
         productos: products.msg.docs,
         hasPrevPage: products.msg.hasPrevPage,
         hasNextPage: products.msg.hasNextPage,
@@ -65,6 +65,10 @@ class ViewsController {
   static resetPassword = async (req, res) => {
     const token = req.query.token;
     res.render("resetPassword", { token })
+  }
+
+  static createProducts = async (req,res) => {
+    res.render("createProducts")
   }
 }
 

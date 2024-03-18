@@ -6,30 +6,35 @@ const collection = "products";
 const productSchema = new mongoose.Schema ({
             title: {
                 type: String,
-                require:true,
+                required:true,
             },
             description: {
                 type: String,
-                require: true,
+                required: true,
             },
             price: {
                 type: Number,
-                require: true,
+                required: true,
+                min:1 
             },
             thumbnail: {
                 type: String,
                 unique: true},
             code: {
                 type: Number,
-                require: true,
+                required: true,
             },
             stock: {
                 type: Number,
-                require: true,
+                required: true,
             },
             category: {
                 type: String,
-                require: true,
+                required: true,
+            },
+            owner: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "users"
             }
 })
 

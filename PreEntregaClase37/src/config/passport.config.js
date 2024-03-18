@@ -124,7 +124,7 @@ const inicializePassport = () => {
 
     }))
 
-    // passport.use("current", new LocalStrategy(
+    
 
 
 }

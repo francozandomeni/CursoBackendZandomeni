@@ -12,12 +12,9 @@ class SessionsController {
         try {
 
 
-            if (req.body.email === "franco@coder.com" && req.body.password === "adminCoderfranco123") {
-                req.user.role = "admin";
-            }
-
+            
             const { first_name, last_name, email } = req.body;
-
+            
 
             if (!first_name || !last_name || !email) {
                 throw CustomError.createError({
@@ -54,10 +51,6 @@ class SessionsController {
             return res.status(400).send({ status: "error" })
         }
 
-        if (req.user.email === "franco@coder.com" && req.user.password === "adminCoderfranco123") {
-            req.user.role = "admin";
-        }
-
 
         req.session.user = {
             first_name: req.user.first_name,
@@ -66,7 +59,7 @@ class SessionsController {
             email: req.user.email,
             role: req.user.role
         }
-        console.log("sessions login controller", req.session.user)
+
         res.send({
             status: "success",
             payload: req.session.user
@@ -168,6 +161,27 @@ class SessionsController {
         } catch (error) {
             console.log(error)
             res.send(`<div>Error, hable con el administrador.</div>`)
+        }
+    }
+
+    static changeRol = async(req,res)=>{
+        try {
+            const userId = req.params.uid;
+            
+            const user = await userService.getUserById(userId);
+            const userRol = user.rol;
+            if(userRol === "user"){
+                user.rol = "premium"
+            } else if(userRol === "premium"){
+                user.rol = "user"
+            } else {
+                return res.json({status:"error", message:"no es posible cambiar el role del usuario"});
+            }
+            await UserModel.updateOne({_id:user._id},user);
+            res.send({status:"success", message:"rol modificado"});
+        } catch (error) {
+            console.log(error.message);
+            res.json({status:"error", message:"hubo un error al cambiar el rol del usuario"})
         }
     }
 }
