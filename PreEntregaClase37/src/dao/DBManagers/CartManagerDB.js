@@ -25,7 +25,9 @@ export default class CartManager {
   async addProductToCartById(cid, pid, quantity = 1) {
 
     try {
+      
       const cart = await cartsModel.findById(cid)
+      
       if (!cart) {
         return {
           status: "error",
@@ -36,6 +38,7 @@ export default class CartManager {
       const existingProductIndex = cart.products.findIndex(
         (item) => item.product.toString() === pid
       );
+      
 
       if (existingProductIndex !== -1) {
         // Si el producto ya existe, incrementa la cantidad

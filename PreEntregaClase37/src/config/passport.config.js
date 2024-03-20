@@ -61,7 +61,7 @@ const inicializePassport = () => {
                 return done(null, false);
             }
             if(!validatePassword(password, user)){
-                console.log("contrasenia desconocida")
+                console.log("contrasena desconocida")
                 return done(null, false);
             }
             return done(null,user)

@@ -41,7 +41,17 @@ class CartsController {
   static addProductById = async (req, res) => {
     try {
       const { cid, pid } = req.params;
-      // const quantity = 1
+
+      const user = req.user._id
+
+      const product = await productService.getProductById(pid)
+
+      const currentUser = await userService.getUserById(user)
+
+
+      if (product.owner === currentUser) {
+        res.send(`No puedes agregar un producto al carrito que tu mismo has creado.`)
+      }
       const result = await cartService.addProductById(cid, pid);
       res.status(200).json(result);
 
@@ -113,10 +123,10 @@ class CartsController {
       console.log("Starting purchase process...");
       console.log("Cart ID is:", cid);
       console.log("Cart purchaser:", user)
-      if(!user || !cart){
+      if (!user || !cart) {
         console.log("We can't proceeed without information from the user or cart")
       }
-     
+
 
       const cart = await cartService.getCartById(cid);
       console.log("Cart finded:", cart);
@@ -138,7 +148,7 @@ class CartsController {
 
         console.log(`checking stock for product: ${cartProduct._id}...`);
 
-        if (product.stock < quantityInCart) { 
+        if (product.stock < quantityInCart) {
           console.log(`Not enough stock for product: ${cartProduct._id}`);
           // Adjust to no exceed quantity available
           cartProduct.quantity = product.stock;
@@ -174,18 +184,18 @@ class CartsController {
         // Calculating total amount
         totalAmount += parseInt(product.price * quantityInCart);
 
-       
+
       }
       //testing b4 ticket
-      if(totalAmount = 0 || !totalAmount){
+      if (totalAmount = 0 || !totalAmount) {
         console.log(
           "TEST. You don't have a total amount in cart. Purchase and ticket will not be generated")
       }
-      
+
       //creating ticket
       console.log("Creating buying ticket.");
       const ticketRepository = new TicketRepository()
-      
+
       const newTicket = {
         code: generateCode(),
         purchase_datetime: new Date(),
@@ -194,7 +204,7 @@ class CartsController {
         products: cart.products
       };
 
-      
+
 
       const ticket = await ticketRepository.createTicket(newTicket)
       console.log("Ticket created:", ticket);

@@ -1,4 +1,4 @@
-import { productService } from "../repository/index.js";
+import { productService, userService } from "../repository/index.js";
 import { CustomError } from "../services/customError.service.js"
 import { generateProductErrorInfo } from "../services/ProductErrorInfo.js"
 import { EError } from "../enums/EError.js"
@@ -98,7 +98,9 @@ class ProductsController {
 
             }
             
-            // product.owner = req.user_id
+            const user = req.user ? req.user._id : "admin"
+            
+            const owner = await userService.getUserById(user)
             
             const product = {
                 title,
@@ -108,21 +110,21 @@ class ProductsController {
                 code,
                 stock,
                 category,
-                // owner
+                owner
 
             }
 
 
             const result = await productService.addProduct(product);
             res.send("Se ha creado el producto correctamente.")
-            res.status(200).json(result);
+            
         } catch (error) {
             if (error.cause) {
                 req.logger.warn("error 400 creando el producto")
                 res.status(400).json({ message: error.message, cause: error.cause });
             } else {
                 req.logger.error("error creando el producto")
-                res.status(500).json({ message: error.message });
+                
                 res.send(`<div>Error, <a href="/create-product">Intente de nuevo</a></div>`)
             }
         }
@@ -160,7 +162,11 @@ class ProductsController {
     static delete = async (req, res) => {
         {
             const pid = req.params.pid;
+            
+            const checkOwner = await userService.getUserById(info)
+
             try {
+                // if()
                 const result = await productService.deleteProduct(pid);
                 res.status(200).json(result);
             } catch (error) {

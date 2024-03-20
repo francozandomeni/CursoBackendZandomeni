@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import {SessionsController} from "../controllers/sessions.controller.js"
+import {checkRole} from "../middleware/auth.js"
 
 const router = Router();
 
@@ -43,5 +44,8 @@ const isAuthenticated = (req, res, next) => {
 router.post("/forgot-password", SessionsController.forgotPassword)
 
 router.post("/reset-password", SessionsController.resetPassword)
+
+router.put("/premium/:uid", checkRole(["admin"]) , SessionsController.changeRol);
+
 
 export default router;

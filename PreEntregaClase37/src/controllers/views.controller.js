@@ -18,7 +18,7 @@ class ViewsController {
     try {
 
       const { limit, page, sort, category, price, stock } = req.query;
-      // console.log("views controller0",req.query)
+      
 
       const options = {
         limit: parseInt(limit) || 10,
@@ -30,11 +30,7 @@ class ViewsController {
       };
 
       const products = await productService.getProducts(options);
-      // console.log("views controller1", products)
-      // console.log("views controller2", options)
-
-
-
+      
 
 
       res.render("productos", {

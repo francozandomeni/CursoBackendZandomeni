@@ -3,6 +3,8 @@
     <p>Email: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
     <a href="/api/sessions/logout"><button>Salir</button></a>
+
+    <h2>Eres usuario premium y quieres crear un producto para la venta? <a href="/create">Click aqui</a></h2>
 </div>
 
   <h1>Lista de Productos</h1>
@@ -25,11 +27,11 @@
 
   <div class="pagination">
     {{#if hasPrevPage}}
-      <a href="/products?page={{prevPage}}">Anterior</a>
+      <a href="/productos?page={{prevPage}}">Anterior</a>
     {{/if}}
 
     {{#if hasNextPage}}
-      <a href="/products?page={{nextPage}}">Siguiente</a>
+      <a href="/productos?page={{nextPage}}">Siguiente</a>
     {{/if}}
   </div>
 </div>
